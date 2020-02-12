@@ -18,7 +18,7 @@ class Login_Model extends Model
 		$login 		= $_POST['login'];
 		$password 	= $_POST['password'];
 		
-		$query = "SELECT role 
+		$query = "SELECT id, role 
 					FROM users 
 					WHERE login = :login
 					AND password = :password";
@@ -34,14 +34,15 @@ class Login_Model extends Model
 		if ($rows === 1) {
 			Session::init();
 			Session::set('loggedIn', true);
+			Session::set('userId', $data['id']);
 			Session::set('role', $data['role']);
 			
-			$path = URL . '/dashboard';
+			$path = URL . 'dashboard';
 //			echo $path; die();
 			header('Location: '.$path);
 		}
 		else {
-			$path = URL . '/login';
+			$path = URL . 'login';
 			
 			header('Location: '.$path);
 		}

@@ -5,14 +5,14 @@
 <form action="<?php echo URL; ?>/user/editSave/<?php echo $this->user['id']; ?>" method="post">
 	<label for="">
 		Login
-		<input type="text" name="login">
+		<input type="text" name="login" value="<?php echo $this->user['login']; ?>">
 	</label>
 
 	<br>
 
 	<label for="">
 		Password
-		<input type="password" name="password" value="<?php echo $this->user[''] ?>">
+		<input type="password" name="password" value="<?php echo $this->user['password']; ?>">
 	</label>
 
 	<br>

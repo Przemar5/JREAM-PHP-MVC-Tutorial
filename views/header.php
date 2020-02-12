@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Website</title>
+	<title>
+		<?php echo (isset($this->title)) ? $this->title : 'MVC'; ?>
+	</title>
 	<link rel="stylesheet" href="<?php echo URL; ?>public/css/jquery.ui.css">
 	<link rel="stylesheet" href="<?php echo URL; ?>public/css/default.css">
 	<script type="text/javascript" src="<?php echo URL; ?>public/js/jquery.js"></script>
@@ -26,6 +28,7 @@
 		
 		<?php if (Session::get('loggedIn') === true): ?>
 			<a href="<?php echo URL; ?>dashboard">Dashboard</a>
+			<a href="<?php echo URL; ?>note">Notes</a>
 			
 			<?php if (Session::get('role') == 'owner'): ?>
 				<a href="<?php echo URL; ?>user">Users</a>

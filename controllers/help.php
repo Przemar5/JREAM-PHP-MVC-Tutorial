@@ -11,6 +11,7 @@ class Help extends Controller
 	
 	public function index()
 	{
+		$this->view->title = 'Help';
 		$this->view->render('help/index');
 	}
 	

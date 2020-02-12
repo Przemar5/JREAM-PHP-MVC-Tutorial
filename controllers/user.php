@@ -6,18 +6,7 @@ class User extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-		
-		Session::init();
-		$logged = Session::get('loggedIn');
-		$role = Session::get('role');
-		
-		if ($logged == false || $role != 'owner') {
-			Session::destroy();
-			$path = URL . '/login';
-			
-			header('Location: '.$path);
-			exit();
-		}
+		Auth::handleLogin();
 		
 		$this->view->js = [
 			'dashboard/js/default.js',
@@ -26,6 +15,7 @@ class User extends Controller
 	
 	public function index()
 	{
+		$this->view->title = 'Users';
 		$this->view->userList = $this->model->userList();
 		$this->view->render('user/index');
 	}
@@ -46,6 +36,7 @@ class User extends Controller
 	
 	public function edit($id)
 	{
+		$this->view->title = 'Edit user';
 		$this->view->user = $this->model->userSingleList($id);
 		$this->view->render('user/edit');
 	}

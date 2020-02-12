@@ -6,16 +6,7 @@ class Dashboard extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-		Session::init();
-		$logged = Session::get('loggedIn');
-		
-		if ($logged == false) {
-			Session::destroy();
-			$path = URL . '/login';
-			
-			header('Location: '.$path);
-			exit();
-		}
+		Auth::handleLogin();
 		
 		$this->view->js = [
 			'dashboard/js/default.js',
@@ -24,6 +15,7 @@ class Dashboard extends Controller
 	
 	public function index()
 	{
+		$this->view->title = 'Dashboard';
 		$this->view->render('dashboard/index');
 	}
 	

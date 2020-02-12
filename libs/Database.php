@@ -39,7 +39,7 @@ class Database extends PDO
 				$mappedValues = array_map(function($key) {
 									return "$key = :$key";
 								}, array_keys($where));
-				$condition = "WHERE " . implode(', ', $mappedValues);
+				$condition = "WHERE " . implode(' AND ', $mappedValues);
 				$params = $where;
 			}
 			else if (gettype($where) === 'string') {
@@ -73,29 +73,44 @@ class Database extends PDO
 		$query = "INSERT INTO $table ($fieldNames) VALUES ($fieldValues)";
 		$stmt = $this->prepare($query);
 		
-		foreach ($data as $key => $value) {
-			$stmt->bindValue(":$key", $value);
-		}
-		
-		$stmt->execute();
+//		foreach ($data as $key => $value) {
+//			$stmt->bindValue(":$key", $value);
+//		}
+		echo $query . "<br>";
+		$stmt->execute($data);
 	}
 	
 	public function update($table, $data, $where)
 	{
 		ksort($data);
+		$params = [];
 		
 		$fieldDetails = implode(', ', array_map(function($key) {
 			return "$key = :$key";
 		}, array_keys($data)));
 		
-		$query = "UPDATE $table SET $fieldDetails WHERE $where";
+		if (!empty($where)) {
+			if (gettype($where) === 'array') {
+				$mappedValues = array_map(function($key) {
+									return "$key = :$key";
+								}, array_keys($where));
+				$condition = "WHERE " . implode(' AND ', $mappedValues);
+				$params = $where;
+			}
+			else if (gettype($where) === 'string') {
+				$condition = "WHERE $where";
+			}
+		}
+		
+		$query = "UPDATE $table SET $fieldDetails $condition";
 		$stmt = $this->prepare($query);
 		
 		foreach ($data as $key => $value) {
 			$stmt->bindValue(":$key", $value);
 		}
+		$params = array_merge($params, $data);
 		
-		$stmt->execute();
+		$stmt->execute($params);
 	}
 	
 	public function delete($table, $where, $limit = 1)
@@ -107,7 +122,7 @@ class Database extends PDO
 				$mappedValues = array_map(function($key) {
 									return "$key = :$key";
 								}, array_keys($where));
-				$condition = "WHERE " . implode(', ', $mappedValues);
+				$condition = "WHERE " . implode(' AND ', $mappedValues);
 				$params = $where;
 			}
 			else if (gettype($where) === 'string') {

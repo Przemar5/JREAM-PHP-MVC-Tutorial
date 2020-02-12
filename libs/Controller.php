@@ -8,14 +8,14 @@ class Controller
 		$this->view = new View;
 	}
 	
-	public function loadModel($name) 
+	public function loadModel($name, $modelPath) 
 	{
-		$path = 'models/'.$name.'_model.php';
+		$path = $modelPath . $name . '_model.php';
 		
 		if (file_exists($path)) {
 			require_once $path;
 			
-			$modelName = $name.'_Model';
+			$modelName = $name . '_Model';
 			$this->model = new $modelName;
 		}
 	}
